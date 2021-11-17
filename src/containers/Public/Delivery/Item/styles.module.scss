@@ -1,0 +1,18 @@
+@import '../../../../sources/styles/variables.scss';
+
+.item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 40px;
+    margin-bottom: 5px;
+    padding: 0 20px;
+    text-align: center;
+    border-radius: 7px;
+    border: 2px solid $brandColor;
+    background-color: white;
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
