@@ -1,0 +1,18 @@
+@import '../../../sources/styles/variables.scss';
+
+.container {
+  width: 100%;
+  max-width: 1112px;
+  margin: 0 auto;
+  padding: 20px 15px;
+
+  .title {
+    display: block;
+    margin: 0 auto;
+    margin-top: 100px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: 700;
+    color: $brandColor;
+  }
+}
