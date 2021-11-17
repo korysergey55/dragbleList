@@ -1,8 +1,8 @@
 {
-  "name": "my-app",
+  "name": "draggable-list",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://korysergey55.github.io/dragbleList",
+  "homepage": "https://korysergey55.github.io/draggableList",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-brands-svg-icons": "^5.15.4",
