@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import {IItem} from './types'
+import { IItem } from './types'
 import Item from './Item'
 
 import styles from './style.module.scss'
@@ -45,18 +45,29 @@ const Delivery = () => {
       <div className={styles.container}>
         <div className={styles.wripperMyList}>
           <h2 className={styles.title}>My delivery-list</h2>
-          {/* <Droppable droppableId="myList"> */}
-          <ul className={styles.myList}>
-            {myItems &&
-              myItems.map((item, index) => (
-                <>
-                  {/* <Draggable draggableId={item.id} index={index} key={index}> */}
-                  <Item item={item} />
-                  {/* </Draggable> */}
-                </>
-              ))}
-          </ul>
-          {/* </Droppable> */}
+          <Droppable droppableId="myList">
+            {provided => (
+              <ul
+                className={styles.myList}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                {myItems &&
+                  myItems.map((item, index) => (
+                    <Draggable draggableId={item.id} index={index} key={index}>
+                      {(provided, snapshot) => (
+                        <Item
+                          item={item}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        />
+                      )}
+                    </Draggable>
+                  ))}
+              </ul>
+            )}
+          </Droppable>
         </div>
 
         <div className={styles.wripper}>
