@@ -1,18 +1,72 @@
 @import '../../../sources/styles/variables.scss';
 
-.container {
-  width: 100%;
-  max-width: 1112px;
-  margin: 0 auto;
-  padding: 20px 15px;
+.homeContainer {
+  padding-top: 80px;
 
   .title {
     display: block;
     margin: 0 auto;
-    margin-top: 100px;
+    margin-bottom: 10px;
     text-align: center;
     font-size: 30px;
     font-weight: 700;
-    color: $brandColor;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    width: 100%;
+    max-width: 1112px;
+    margin: 0 auto;
+    padding: 10px 15px;
+
+    .myList {
+      width: 100%;
+      max-width: 500px;
+      min-height: 500px;
+      margin-bottom: 10px;
+      margin-right: 10px;
+      padding: 10px;
+      border-radius: 7px;
+      border: 2px solid $brandColor;
+      background-color: rgb(226, 225, 225);
+    }
+    .wripper {
+      flex: 1;
+      .remuvebleList {
+        width: 100%;
+        max-width: 500px;
+        max-height: 300px;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 7px;
+        border: 2px solid $brandColor;
+        background-color: rgb(226, 225, 225);
+      }
+      .constantList {
+        width: 100%;
+        max-width: 500px;
+        max-height: 300px;
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 7px;
+        border: 2px solid $brandColor;
+        background-color: rgb(226, 225, 225);
+      }
+    }
+    .item {
+      min-height: 40px;
+      margin-bottom: 5px;
+      text-align: center;
+      border-radius: 7px;
+      border: 2px solid $brandColor;
+      background-color: white;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
 }
