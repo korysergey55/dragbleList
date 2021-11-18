@@ -1,18 +1,14 @@
 import React from 'react'
 import { IItem } from '../types'
-import styles from './styles.module.scss'
+import { LiComponent } from './Styled'
 
 interface IProps {
   item: IItem
+  children: Node
 }
 
-const Item: React.FC<any> = ({ item }) => {
-  return (
-    <li className={styles.item}>
-      <p className={styles.id}> {item.id}</p>
-      <p className={styles.text}> {item.content}</p>
-    </li>
-  )
+const DeliveryItem: React.FC<any> = ({ children }) => {
+  return <LiComponent>{children}</LiComponent>
 }
 
-export default Item
+export default DeliveryItem

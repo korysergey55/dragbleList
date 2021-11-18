@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import { IItem } from './types'
-import Item from './Item'
+import DeliveryItem from './Item'
 
 import styles from './style.module.scss'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { LiComponent } from './Item/Styled'
 
 const initial = [
   { id: '1', content: 'apple' },
@@ -13,17 +14,39 @@ const initial = [
   { id: '5', content: 'grapefruit' },
 ]
 
+const reorder = (list: any, startIndex: any, endIndex: any) => {
+  const result = Array.from(list)
+  const [removed] = result.splice(startIndex, 1)
+  result.splice(endIndex, 0, removed)
+
+  return result
+}
+const Item = ({ item, index }: any) => {
+  return (
+    <Draggable draggableId={item.id} index={index}>
+      {provided => (
+        <LiComponent
+          ref={provided.innerRef}
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+        >
+          {item.content}
+        </LiComponent>
+      )}
+    </Draggable>
+  )
+}
+
+const ItemList = React.memo(function ItemList({ products }: any) {
+  return (
+    products &&
+    products.map((item: any, index: number) => (
+      <Item item={item} index={index} key={item.id} />
+    ))
+  )
+})
 const Delivery = () => {
-  const [state, setState] = useState<any>({ quotes: initial })
-  const [myItems, setMyItems] = useState<IItem[]>([...initial])
-
-  const reorder = (list: any, startIndex: any, endIndex: any) => {
-    const result = Array.from(list)
-    const [removed] = result.splice(startIndex, 1)
-    result.splice(endIndex, 0, removed)
-
-    return result
-  }
+  const [state, setState] = useState<any>({ products: initial })
 
   function onDragEnd(result: any) {
     if (!result.destination) {
@@ -33,11 +56,11 @@ const Delivery = () => {
       return
     }
     const quotes = reorder(
-      state.quotes,
+      state.products,
       result.source.index,
       result.destination.index
     )
-    setState({ quotes })
+    setState(quotes)
   }
 
   return (
@@ -47,24 +70,8 @@ const Delivery = () => {
           <h2 className={styles.title}>My delivery-list</h2>
           <Droppable droppableId="myList">
             {provided => (
-              <ul
-                className={styles.myList}
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                {myItems &&
-                  myItems.map((item, index) => (
-                    <Draggable draggableId={item.id} index={index} key={index}>
-                      {(provided, snapshot) => (
-                        <Item
-                          item={item}
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        />
-                      )}
-                    </Draggable>
-                  ))}
+              <ul ref={provided.innerRef} {...provided.droppableProps}>
+                <ItemList products={state.products} />
               </ul>
             )}
           </Droppable>
@@ -73,12 +80,18 @@ const Delivery = () => {
         <div className={styles.wripper}>
           <ul className={styles.remuvebleList}>
             <h2 className={styles.title}>Food-list</h2>
-            {myItems && myItems.map(item => <Item item={item} />)}
+            {state.products &&
+              state.products.map((item: any, index: any) => (
+                <DeliveryItem key={index}>{item.content}</DeliveryItem>
+              ))}
           </ul>
 
           <ul className={styles.constantList}>
             <h2 className={styles.title}>Food-list-infinity</h2>
-            {myItems && myItems.map(item => <Item item={item} />)}
+            {state.products &&
+              state.products.map((item: any, index: any) => (
+                <DeliveryItem key={index}>{item.content}</DeliveryItem>
+              ))}
           </ul>
         </div>
       </div>

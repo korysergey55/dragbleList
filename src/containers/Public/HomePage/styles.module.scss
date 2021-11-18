@@ -1,6 +1,9 @@
 @import '../../../sources/styles/variables.scss';
 
 .homeContainer {
+  width: 100%;
+  max-width: 1112px;
+  margin: 0 auto;
   padding-top: 80px;
 
   .title {
