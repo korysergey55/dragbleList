@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { LiComponent } from '../Delivery/Item/Styled'
 
 const initial = [
   { id: '1', content: 'apple' },
@@ -30,13 +29,13 @@ function Quote({ quote, index }: any) {
   return (
     <Draggable draggableId={quote.id} index={index}>
       {provided => (
-        <LiComponent
+        <QuoteItem
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
         >
           {quote.content}
-        </LiComponent>
+        </QuoteItem>
       )}
     </Draggable>
   )

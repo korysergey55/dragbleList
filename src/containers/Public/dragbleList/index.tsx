@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import styled from '@emotion/styled'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { LiComponent } from '../Delivery/Item/Styled'
+import { LiComponent } from '../Item/Styled'
 import styles from './styles.module.scss'
 
 const initial = [
@@ -41,8 +41,8 @@ const DragbleList = () => {
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={styles.container}>
         <div className={styles.wripperMyList}>
-          <h2 className={styles.title}>My delivery-list</h2>
-          <Droppable droppableId="myList">
+          <h2 className={styles.title}>Dragble-List</h2>
+          <Droppable droppableId="dragble-list">
             {provided => (
               <ul ref={provided.innerRef} {...provided.droppableProps}>
                 {state.quotes &&

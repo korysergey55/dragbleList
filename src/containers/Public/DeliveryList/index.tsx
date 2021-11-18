@@ -1,10 +1,8 @@
 import React, { useState } from 'react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import { IItem } from './types'
-import DeliveryItem from './Item'
 
 import styles from './style.module.scss'
-import { LiComponent } from './Item/Styled'
+import { LiComponent } from '../Item/Styled'
 
 const initial = [
   { id: '1', content: 'apple' },
@@ -37,16 +35,13 @@ const Item = ({ item, index }: any) => {
   )
 }
 
-const ItemList = React.memo(function ItemList({ products }: any) {
-  return (
-    products &&
-    products.map((item: any, index: number) => (
-      <Item item={item} index={index} key={item.id} />
-    ))
-  )
+const ItemList = React.memo(function ItemList({ items }: any) {
+  return items?.map((item: any, index: number) => (
+    <Item item={item} index={index} key={item.id} />
+  ))
 })
 const Delivery = () => {
-  const [state, setState] = useState<any>({ products: initial })
+  const [state, setState] = useState<any>({ quotes: initial })
 
   function onDragEnd(result: any) {
     if (!result.destination) {
@@ -56,11 +51,11 @@ const Delivery = () => {
       return
     }
     const quotes = reorder(
-      state.products,
+      state.quotes,
       result.source.index,
       result.destination.index
     )
-    setState(quotes)
+    setState({ quotes })
   }
 
   return (
@@ -68,31 +63,13 @@ const Delivery = () => {
       <div className={styles.container}>
         <div className={styles.wripperMyList}>
           <h2 className={styles.title}>My delivery-list</h2>
-          <Droppable droppableId="myList">
+          <Droppable droppableId="my-delivery-list">
             {provided => (
               <ul ref={provided.innerRef} {...provided.droppableProps}>
-                <ItemList products={state.products} />
+                <ItemList items={state.quotes} />
               </ul>
             )}
           </Droppable>
-        </div>
-
-        <div className={styles.wripper}>
-          <ul className={styles.remuvebleList}>
-            <h2 className={styles.title}>Food-list</h2>
-            {state.products &&
-              state.products.map((item: any, index: any) => (
-                <DeliveryItem key={index}>{item.content}</DeliveryItem>
-              ))}
-          </ul>
-
-          <ul className={styles.constantList}>
-            <h2 className={styles.title}>Food-list-infinity</h2>
-            {state.products &&
-              state.products.map((item: any, index: any) => (
-                <DeliveryItem key={index}>{item.content}</DeliveryItem>
-              ))}
-          </ul>
         </div>
       </div>
     </DragDropContext>
