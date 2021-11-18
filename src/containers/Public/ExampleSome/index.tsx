@@ -1,0 +1,161 @@
+import React, { Component } from 'react'
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
+import { LiComponent } from '../Item/Styled'
+import styles from './styles.module.scss'
+
+const reorder = (list: any, startIndex: any, endIndex: any) => {
+  const result = Array.from(list)
+  const [removed] = result.splice(startIndex, 1)
+  result.splice(endIndex, 0, removed)
+
+  return result
+}
+
+// Move item from one list to other
+const move = (
+  source: any,
+  destination: any,
+  droppableSource: any,
+  droppableDestination: any
+) => {
+  const sourceClone = Array.from(source)
+  const destClone = Array.from(destination)
+  const [removed] = sourceClone.splice(droppableSource.index, 1)
+
+  destClone.splice(droppableDestination.index, 0, removed)
+
+  const result: any = {}
+  result[droppableSource.droppableId] = sourceClone
+  result[droppableDestination.droppableId] = destClone
+
+  return result
+}
+
+class MultipleDragList extends Component {
+  state: any = {
+    items: [
+      { id: '1', content: 'apple' },
+      { id: '2', content: 'avocado' },
+      { id: '3', content: 'apricot' },
+      { id: '4', content: 'pear' },
+      { id: '5', content: 'grapefruit' },
+    ],
+    selected: [
+      { id: '1', content: 'apple2' },
+      { id: '2', content: 'avocado2' },
+      { id: '3', content: 'apricot2' },
+      { id: '4', content: 'pear2' },
+      { id: '5', content: 'grapefruit2' },
+    ],
+  }
+
+  // Defining unique ID for multiple lists
+  id2List: any = {
+    droppable: 'items',
+    droppable2: 'selected',
+  }
+
+  getList = (id: any) => this.state[this.id2List[id]]
+
+  onDragEnd = (result: any) => {
+    const { source, destination } = result
+    if (!destination) {
+      return
+    }
+    // Sorting in same list
+    if (source.droppableId === destination.droppableId) {
+      const items: any = reorder(
+        this.getList(source.droppableId),
+        source.index,
+        destination.index
+      )
+      let state: any = { items }
+      if (source.droppableId === 'droppable2') {
+        state = { selected: items }
+      }
+      this.setState(state)
+    }
+    // Interlist movement
+    else {
+      const result = move(
+        this.getList(source.droppableId),
+        this.getList(destination.droppableId),
+        source,
+        destination
+      )
+      this.setState({
+        items: result.droppable,
+        selected: result.droppable2,
+      })
+    }
+  }
+
+  render() {
+    return (
+      <DragDropContext onDragEnd={this.onDragEnd}>
+        <div className={styles.container}>
+          <div className={styles.wripperMyList}>
+            <h2 className={styles.title}>Delivery-list</h2>
+            <Droppable droppableId="droppable">
+              {(provided, snapshot) => (
+                <ul ref={provided.innerRef} {...provided.droppableProps}>
+                  {this.state.items.map((item: any, index: any) => (
+                    <Draggable
+                      key={item.id}
+                      draggableId={item.id}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <LiComponent
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          {item.content}
+                        </LiComponent>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </div>
+          <div className={styles.wripper}>
+            <Droppable droppableId="droppable2">
+              {(provided, snapshot) => (
+                <ul
+                  className={styles.remuvebleList}
+                  ref={provided.innerRef}
+                  {...provided.droppableProps}
+                >
+                  <h2 className={styles.title}>Food-list</h2>
+                  {this.state.selected.map((item: any, index: any) => (
+                    <Draggable
+                      key={item.id}
+                      draggableId={item.id}
+                      index={index}
+                    >
+                      {(provided, snapshot) => (
+                        <LiComponent
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          {item.content}
+                        </LiComponent>
+                      )}
+                    </Draggable>
+                  ))}
+                  {provided.placeholder}
+                </ul>
+              )}
+            </Droppable>
+          </div>
+        </div>
+      </DragDropContext>
+    )
+  }
+}
+
+export default MultipleDragList

@@ -63,7 +63,7 @@ const SomeDragbleLists = () => {
           </Droppable>
         </div>
         <div className={styles.wripper}>
-          <Droppable droppableId="remuveble-list">
+          <Droppable droppableId="food-list">
             {provided => (
               <ul
                 className={styles.remuvebleList}
