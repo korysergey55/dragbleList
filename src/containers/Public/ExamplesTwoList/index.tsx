@@ -31,7 +31,7 @@ const move = (
   return result
 }
 
-class MultipleDragList extends Component {
+class ExamplesTwoList extends Component {
   state: any = {
     items: [
       { id: '1', content: 'apple' },
@@ -41,11 +41,11 @@ class MultipleDragList extends Component {
       { id: '5', content: 'grapefruit' },
     ],
     selected: [
-      { id: '1', content: 'apple2' },
-      { id: '2', content: 'avocado2' },
-      { id: '3', content: 'apricot2' },
-      { id: '4', content: 'pear2' },
-      { id: '5', content: 'grapefruit2' },
+      { id: '10', content: 'apple2' },
+      { id: '11', content: 'avocado2' },
+      { id: '12', content: 'apricot2' },
+      { id: '13', content: 'pear2' },
+      { id: '14', content: 'grapefruit2' },
     ],
   }
 
@@ -158,4 +158,4 @@ class MultipleDragList extends Component {
   }
 }
 
-export default MultipleDragList
+export default ExamplesTwoList

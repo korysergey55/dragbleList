@@ -1,8 +1,17 @@
 import React from 'react'
 import { LiComponent } from './Styled'
 
-const DeliveryItem: React.FC<any> = ({ children }) => {
-  return <LiComponent>{children}</LiComponent>
+const DraggbleItem: React.FC<any> = ({
+  children,
+  ref,
+  draggableProps,
+  dragHandleProps,
+}) => {
+  return (
+    <LiComponent ref={ref} {...draggableProps} {...dragHandleProps}>
+      {children}
+    </LiComponent>
+  )
 }
 
-export default DeliveryItem
+export default DraggbleItem

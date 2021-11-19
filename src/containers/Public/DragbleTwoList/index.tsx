@@ -18,7 +18,7 @@ const reorder = (list: any, startIndex: any, endIndex: any) => {
   return result
 }
 
-const SomeDragbleLists = () => {
+const DragbleTwoList = () => {
   const [state, setState] = useState<any>({ quotes: initial })
 
   const onDragEnd = (result: any) => {
@@ -88,7 +88,15 @@ const SomeDragbleLists = () => {
               </ul>
             )}
           </Droppable>
-          <Droppable droppableId="infinity-list">
+        </div>
+      </div>
+    </DragDropContext>
+  )
+}
+export default DragbleTwoList
+
+{
+  /* <Droppable droppableId="infinity-list">
             {provided => (
               <ul
                 className={styles.remuvebleList}
@@ -112,10 +120,5 @@ const SomeDragbleLists = () => {
                   ))}
               </ul>
             )}
-          </Droppable>
-        </div>
-      </div>
-    </DragDropContext>
-  )
+          </Droppable> */
 }
-export default SomeDragbleLists
