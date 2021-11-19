@@ -5,7 +5,7 @@ import DraggbleList from '../DraggbleList/index'
 import DraggbleListMemo from '../DraggbleListM/index'
 import DragbleTwoList from '../DragbleTwoList'
 import ExamplesTwoList from '../ExamplesTwoList/index'
-
+import MyTwoList from '../MyTwoList/index'
 const HomePage = () => {
   return (
     <div className={styles.homeContainer}>
@@ -14,8 +14,9 @@ const HomePage = () => {
       {/* <DraggbleList /> */}
       {/* <DraggbleListMemo /> */}
 
-      <DragbleTwoList />
+      {/* <DragbleTwoList /> */}
       {/* <ExamplesTwoList /> */}
+      <MyTwoList />
     </div>
   )
 }

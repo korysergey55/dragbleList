@@ -19,7 +19,13 @@ const reorder = (list: any, startIndex: any, endIndex: any) => {
 }
 
 const DragbleTwoList = () => {
-  const [state, setState] = useState<any>({ quotes: initial })
+  const [state, setState] = useState<any>([
+    { id: '1', content: 'apple' },
+    { id: '2', content: 'avocado' },
+    { id: '3', content: 'apricot' },
+    { id: '4', content: 'pear' },
+    { id: '5', content: 'grapefruit' },
+  ])
 
   const onDragEnd = (result: any) => {
     if (!result.destination) {
@@ -28,12 +34,8 @@ const DragbleTwoList = () => {
     if (result.destination.index === result.source.index) {
       return
     }
-    const quotes = reorder(
-      state.quotes,
-      result.source.index,
-      result.destination.index
-    )
-    setState({ quotes })
+    const quotes = reorder(state, result.source.index, result.destination.index)
+    setState(quotes)
   }
 
   return (
@@ -44,20 +46,19 @@ const DragbleTwoList = () => {
           <Droppable droppableId="my-list">
             {provided => (
               <ul ref={provided.innerRef} {...provided.droppableProps}>
-                {state.quotes &&
-                  state.quotes.map((item: any, index: number) => (
-                    <Draggable draggableId={item.id} index={index}>
-                      {provided => (
-                        <LiComponent
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          {item.content}
-                        </LiComponent>
-                      )}
-                    </Draggable>
-                  ))}
+                {state?.map((item: any, index: number) => (
+                  <Draggable draggableId={item.id} index={index}>
+                    {provided => (
+                      <LiComponent
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        {item.content}
+                      </LiComponent>
+                    )}
+                  </Draggable>
+                ))}
               </ul>
             )}
           </Droppable>
@@ -71,20 +72,19 @@ const DragbleTwoList = () => {
                 {...provided.droppableProps}
               >
                 <h2 className={styles.title}>Food-list</h2>
-                {state.quotes &&
-                  state.quotes.map((item: any, index: number) => (
-                    <Draggable draggableId={item.id} index={index}>
-                      {provided => (
-                        <LiComponent
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          {item.content}
-                        </LiComponent>
-                      )}
-                    </Draggable>
-                  ))}
+                {state?.map((item: any, index: number) => (
+                  <Draggable draggableId={item.id} index={index}>
+                    {provided => (
+                      <LiComponent
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        {item.content}
+                      </LiComponent>
+                    )}
+                  </Draggable>
+                ))}
               </ul>
             )}
           </Droppable>
