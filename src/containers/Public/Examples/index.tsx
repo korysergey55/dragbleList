@@ -47,7 +47,7 @@ const QuoteList = React.memo(function QuoteList({ quotes }: any) {
   ))
 })
 
-export default function QuoteApp() {
+function QuoteApp() {
   const [state, setState] = useState<any>({ quotes: initial })
 
   function onDragEnd(result: any) {
@@ -80,3 +80,4 @@ export default function QuoteApp() {
     </DragDropContext>
   )
 }
+export default QuoteApp

@@ -16,23 +16,24 @@ const move = (
   source: any,
   destination: any,
   droppableSource: any,
-  droppableDestination: any,
-  sId: any,
-  dId: any
+  droppableDestination: any
 ) => {
   const sourceClone = Array.from(source)
   const destClone = Array.from(destination)
-  const [removed] = sourceClone.splice(droppableSource.index, 1)
+  // const [removed] = sourceClone.splice(droppableSource.index, 1)
+  // destClone.splice(droppableDestination.index, 0, removed)
 
-  // if (sId === 'droppable2') {
-  //   const [removed] = sourceClone
-  //   destClone.splice(droppableDestination.index, 0, removed)
-  // } else {
+  if (droppableSource.droppableId === 'droppable2') {
+    const [removed]: any = sourceClone
+    destClone.splice(droppableDestination.index, 0, removed)
+
+    console.log('')
+  }
+  //  else {
   //   const [removed] = sourceClone.splice(droppableSource.index, 1)
   //   destClone.splice(droppableDestination.index, 0, removed)
   // }
 
-  destClone.splice(droppableDestination.index, 0, removed)
   const result: any = {}
   result[droppableSource.droppableId] = sourceClone
   result[droppableDestination.droppableId] = destClone
@@ -78,9 +79,7 @@ const MyTwoList = () => {
         source.index,
         destination.index
       )
-
       let formatedState: any = { items }
-
       if (source.droppableId === 'droppable') {
         formatedState = { items: formatedState.items, selected: state.selected }
       } else {
@@ -94,9 +93,7 @@ const MyTwoList = () => {
         getList(source.droppableId),
         getList(destination.droppableId),
         source,
-        destination,
-        source.droppableId,
-        destination.droppableId
+        destination
       )
       setState({
         items: result.droppable,

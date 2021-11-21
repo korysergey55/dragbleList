@@ -3,13 +3,6 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import { LiComponent } from '../Item/Styled'
 import styles from './styles.module.scss'
 
-const initial = [
-  { id: '1', content: 'apple' },
-  { id: '2', content: 'avocado' },
-  { id: '3', content: 'apricot' },
-  { id: '4', content: 'pear' },
-  { id: '5', content: 'grapefruit' },
-]
 const reorder = (list: any, startIndex: any, endIndex: any) => {
   const result = Array.from(list)
   const [removed] = result.splice(startIndex, 1)
@@ -18,37 +11,106 @@ const reorder = (list: any, startIndex: any, endIndex: any) => {
   return result
 }
 
+// Move item from one list to other
+const move = (
+  source: any,
+  destination: any,
+  droppableSource: any,
+  droppableDestination: any
+) => {
+  const sourceClone = Array.from(source)
+  const destClone = Array.from(destination)
+  const [removed] = sourceClone.splice(droppableSource.index, 1)
+  destClone.splice(droppableDestination.index, 0, removed)
+
+  // if (droppableSource.droppableId === 'droppable2') {
+  //   const [removed] = sourceClone
+  //   destClone.splice(droppableDestination.index, 0, removed)
+  // }
+  //  else {
+  //   const [removed] = sourceClone.splice(droppableSource.index, 1)
+  //   destClone.splice(droppableDestination.index, 0, removed)
+  // }
+
+  const result: any = {}
+  result[droppableSource.droppableId] = sourceClone
+  result[droppableDestination.droppableId] = destClone
+
+  return result
+}
+
 const DragbleTwoList = () => {
-  const [state, setState] = useState<any>([
-    { id: '1', content: 'apple' },
-    { id: '2', content: 'avocado' },
-    { id: '3', content: 'apricot' },
-    { id: '4', content: 'pear' },
-    { id: '5', content: 'grapefruit' },
-  ])
+  const [state, setState] = useState<any>({
+    items: [
+      { id: '1', content: 'apple' },
+      { id: '2', content: 'avocado' },
+      { id: '3', content: 'apricot' },
+      { id: '4', content: 'pear' },
+      { id: '5', content: 'grapefruit' },
+    ],
+    selected: [
+      { id: '10', content: 'apple2' },
+      { id: '11', content: 'avocado2' },
+      { id: '12', content: 'apricot2' },
+      { id: '13', content: 'pear2' },
+      { id: '14', content: 'grapefruit2' },
+    ],
+  })
+
+  // Defining unique ID for multiple lists
+  const id2List: any = {
+    droppable: 'items',
+    droppable2: 'selected',
+  }
+
+  const getList = (id: any) => state[id2List[id]]
 
   const onDragEnd = (result: any) => {
-    if (!result.destination) {
+    const { source, destination } = result
+    if (!destination) {
       return
     }
-    if (result.destination.index === result.source.index) {
-      return
+    // Sorting in same list
+    if (source.droppableId === destination.droppableId) {
+      const items: any = reorder(
+        getList(source.droppableId),
+        source.index,
+        destination.index
+      )
+      let formatedState: any = { items }
+      if (source.droppableId === 'droppable') {
+        formatedState = { items: formatedState.items, selected: state.selected }
+      } else {
+        formatedState = { items: state.items, selected: formatedState.items }
+      }
+      setState(formatedState)
     }
-    const quotes = reorder(state, result.source.index, result.destination.index)
-    setState(quotes)
+    // Interlist movement
+    else {
+      const result = move(
+        getList(source.droppableId),
+        getList(destination.droppableId),
+        source,
+        destination
+      )
+      setState({
+        items: result.droppable,
+        selected: result.droppable2,
+      })
+    }
   }
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={styles.container}>
         <div className={styles.wripperMyList}>
-          <h2 className={styles.title}>My delivery-list</h2>
-          <Droppable droppableId="my-list">
-            {provided => (
+          <h2 className={styles.title}>Delivery-list</h2>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
               <ul ref={provided.innerRef} {...provided.droppableProps}>
-                {state?.map((item: any, index: number) => (
-                  <Draggable draggableId={item.id} index={index}>
-                    {provided => (
+                {state.items?.map((item: any, index: any) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => (
                       <LiComponent
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -59,22 +121,23 @@ const DragbleTwoList = () => {
                     )}
                   </Draggable>
                 ))}
+                {provided.placeholder}
               </ul>
             )}
           </Droppable>
         </div>
         <div className={styles.wripper}>
-          <Droppable droppableId="food-list">
-            {provided => (
+          <Droppable droppableId="droppable2">
+            {(provided, snapshot) => (
               <ul
                 className={styles.remuvebleList}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
                 <h2 className={styles.title}>Food-list</h2>
-                {state?.map((item: any, index: number) => (
-                  <Draggable draggableId={item.id} index={index}>
-                    {provided => (
+                {state.selected?.map((item: any, index: any) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => (
                       <LiComponent
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -85,6 +148,7 @@ const DragbleTwoList = () => {
                     )}
                   </Draggable>
                 ))}
+                {provided.placeholder}
               </ul>
             )}
           </Droppable>
@@ -93,32 +157,5 @@ const DragbleTwoList = () => {
     </DragDropContext>
   )
 }
-export default DragbleTwoList
 
-{
-  /* <Droppable droppableId="infinity-list">
-            {provided => (
-              <ul
-                className={styles.remuvebleList}
-                ref={provided.innerRef}
-                {...provided.droppableProps}
-              >
-                <h2 className={styles.title}>Infinity-List</h2>
-                {state.quotes &&
-                  state.quotes.map((item: any, index: number) => (
-                    <Draggable draggableId={item.id} index={index}>
-                      {provided => (
-                        <LiComponent
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                        >
-                          {item.content}
-                        </LiComponent>
-                      )}
-                    </Draggable>
-                  ))}
-              </ul>
-            )}
-          </Droppable> */
-}
+export default DragbleTwoList
