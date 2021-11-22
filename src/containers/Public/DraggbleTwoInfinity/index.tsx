@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { LiComponent } from '../Item/Styled'
+import { v4 as uuidv4 } from 'uuid'
 import styles from './styles.module.scss'
+import { LiComponent } from '../Item/Styled'
 
 const reorder = (list: any, startIndex: any, endIndex: any) => {
   const result = Array.from(list)
@@ -10,7 +11,6 @@ const reorder = (list: any, startIndex: any, endIndex: any) => {
 
   return result
 }
-
 // Move item from one list to other
 const move = (
   source: any,
@@ -24,15 +24,15 @@ const move = (
   // destClone.splice(droppableDestination.index, 0, removed)
 
   if (droppableSource.droppableId === 'droppable2') {
-    const [removed]: any = sourceClone
+    let [removed]: any = sourceClone.filter(
+      (item, index) => index === droppableSource.index
+    )
+    removed = { ...removed, id: uuidv4() }
     destClone.splice(droppableDestination.index, 0, removed)
-
-    console.log('')
+    // console.log('sourceClone', sourceClone)
+    // console.log('droppableSource', droppableSource)
+    // console.log('removed', removed)
   }
-  //  else {
-  //   const [removed] = sourceClone.splice(droppableSource.index, 1)
-  //   destClone.splice(droppableDestination.index, 0, removed)
-  // }
 
   const result: any = {}
   result[droppableSource.droppableId] = sourceClone
@@ -41,7 +41,7 @@ const move = (
   return result
 }
 
-const MyTwoList = () => {
+const DraggbleTwoInfinity = () => {
   const [state, setState] = useState<any>({
     items: [
       { id: '1', content: 'apple' },
@@ -159,5 +159,4 @@ const MyTwoList = () => {
     </DragDropContext>
   )
 }
-
-export default MyTwoList
+export default DraggbleTwoInfinity
