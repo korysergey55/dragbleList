@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { LiComponent } from '../Item/Styled'
+import { v4 as uuidv4 } from 'uuid'
 import styles from './styles.module.scss'
+import { LiComponent } from '../Item/Styled'
 
 const reorder = (list: any, startIndex: any, endIndex: any) => {
   const result = Array.from(list)
@@ -10,7 +11,6 @@ const reorder = (list: any, startIndex: any, endIndex: any) => {
 
   return result
 }
-
 // Move item from one list to other
 const move = (
   source: any,
@@ -20,9 +20,19 @@ const move = (
 ) => {
   const sourceClone = Array.from(source)
   const destClone = Array.from(destination)
-
   const [removed] = sourceClone.splice(droppableSource.index, 1)
   destClone.splice(droppableDestination.index, 0, removed)
+
+  if (droppableSource.droppableId === 'droppable2') {
+    let [removed]: any = sourceClone.filter(
+      (item, index) => index === droppableSource.index
+    )
+    removed = { ...removed, id: uuidv4() }
+    destClone.splice(droppableDestination.index, 0, removed)
+    // console.log('sourceClone', sourceClone)
+    // console.log('droppableSource', droppableSource)
+    // console.log('removed', removed)
+  }
 
   const result: any = {}
   result[droppableSource.droppableId] = sourceClone
@@ -31,7 +41,7 @@ const move = (
   return result
 }
 
-const DragbleTwoList = () => {
+const Draggble = () => {
   const [state, setState] = useState<any>({
     items: [
       { id: '1', content: 'apple' },
@@ -55,10 +65,11 @@ const DragbleTwoList = () => {
     droppable2: 'selected',
   }
 
-  const getList = (id: string) => state[id2List[id]]
+  const getList = (id: any) => state[id2List[id]]
 
   const onDragEnd = (result: any) => {
     const { source, destination } = result
+    console.log(result)
     if (!destination) {
       return
     }
@@ -70,7 +81,6 @@ const DragbleTwoList = () => {
         destination.index
       )
       let formatedState: any = { items }
-      console.log(formatedState)
       if (source.droppableId === 'droppable') {
         formatedState = { items: formatedState.items, selected: state.selected }
       } else {
@@ -145,10 +155,34 @@ const DragbleTwoList = () => {
               </ul>
             )}
           </Droppable>
+          <Droppable droppableId="droppable3">
+            {(provided, snapshot) => (
+              <ul
+                className={styles.remuvebleList}
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+              >
+                <h2 className={styles.title}>Food-list</h2>
+                {state.selected?.map((item: any, index: any) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => (
+                      <LiComponent
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        {item.content}
+                      </LiComponent>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </ul>
+            )}
+          </Droppable>
         </div>
       </div>
     </DragDropContext>
   )
 }
-
-export default DragbleTwoList
+export default Draggble
